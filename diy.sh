@@ -33,7 +33,7 @@ cd openwrt
 # 自定义操作6：更改主题（如果使用LuCI）
 #echo "Changing theme..."
 # 举例：更改LuCI主题
-#sed -i "s/'bootstrap'/'argon'/" feeds/luci/collections/luci/Makefile
+sed -i "s/'bootstrap'/'argon'/" feeds/luci/collections/luci/Makefile
 
 # 自定义操作7：添加自定义配置
 #echo "Adding custom configurations..."
