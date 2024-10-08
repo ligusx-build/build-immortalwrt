@@ -4,7 +4,7 @@
 #echo "Executing DIY_P1_SH: config/diy-part1.sh..."
 
 # 更改到OpenWrt目录
-cd openwrt
+#cd openwrt
 
 # 自定义操作1：添加额外的feeds
 #echo "Adding custom feeds..."
@@ -31,7 +31,7 @@ cd openwrt
 # ./scripts/feeds install your-package
 
 # 自定义操作6：更改主题（如果使用LuCI）
-#echo "Changing theme..."
+echo "Changing theme..."
 # 举例：更改LuCI主题
 sed -i "s/'bootstrap'/'argon'/" feeds/luci/collections/luci/Makefile
 
