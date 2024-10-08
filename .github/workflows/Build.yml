@@ -11,7 +11,7 @@ on:
         
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: v23.05.2
+  REPO_BRANCH: v23.05.3
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   TZ: Asia/Shanghai
@@ -50,7 +50,6 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-
     - name: 配置 Feeds
       run: |
         cp -f $GITHUB_WORKSPACE/.config $GITHUB_WORKSPACE/openwrt/
@@ -67,7 +66,13 @@ jobs:
         cd openwrt
         sed -i 's/192.168.1.1/10.0.0.2/g' package/base-files/files/bin/config_generate
         neofetch
-
+        
+    - name: 执行自定义脚本
+      run: |
+        cd openwrt
+        chmod +x $GITHUB_WORKSPACE/diy.sh
+        $GITHUB_WORKSPACE/diy.sh
+      
     - name: 下载依赖
       run: |
         cd openwrt
