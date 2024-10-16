@@ -60,7 +60,7 @@ jobs:
     - name: 配置 feeds
       run: |        
         cd openwrt
-        cp -f $GITHUB_WORKSPACE/$FEEDS_CONF $GITHUB_WORKSPACE/openwrt/feeds
+        cp -f $GITHUB_WORKSPACE/$FEEDS_CONF $GITHUB_WORKSPACE/openwrt/feeds.conf.default
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         cp -f $GITHUB_WORKSPACE/$CONFIG_FILE $GITHUB_WORKSPACE/openwrt/.config
