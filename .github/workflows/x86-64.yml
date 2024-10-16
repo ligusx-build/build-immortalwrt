@@ -53,16 +53,16 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         
-    - name: 自定义 feeds
-      run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-        
     - name: 执行自定义脚本
       run: |
         cd openwrt
         chmod +x $GITHUB_WORKSPACE/$DIY
         $GITHUB_WORKSPACE/$DIY
-        
+    
+    - name: 自定义 feeds
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+    
     - name: 配置 feeds
       run: |        
         cd openwrt
