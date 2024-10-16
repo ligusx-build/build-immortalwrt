@@ -11,7 +11,7 @@ echo "src-git small https://github.com/kenzok8/small" >> ./feeds.conf.default
 
 # 自定义操作2：修改默认IP
 echo -e "修改默认ip地址..."
-sed -i 's/192.168.1.1/10.0.0.2/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/10.0.0.22/g' package/base-files/files/bin/config_generate
 
 # 自定义操作3：添加额外的包或配置
 #echo "Adding custom packages..."
