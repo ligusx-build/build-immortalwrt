@@ -54,13 +54,13 @@ jobs:
     - name: 执行自定义脚本
       run: |
         cd openwrt
+        cp -f $GITHUB_WORKSPACE/$FEEDS_CONF $GITHUB_WORKSPACE/openwrt/feeds.conf.default
         chmod +x $GITHUB_WORKSPACE/$DIY
         $GITHUB_WORKSPACE/$DIY
         
     - name: 配置 feeds
       run: |        
         cd openwrt
-        cp -f $GITHUB_WORKSPACE/$FEEDS_CONF $GITHUB_WORKSPACE/openwrt/feeds.conf.default
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         cp -f $GITHUB_WORKSPACE/$CONFIG_FILE $GITHUB_WORKSPACE/openwrt/.config
