@@ -10,6 +10,7 @@
 echo "Adding custom feeds..."
 echo 'src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git;main' >> ./feeds.conf.default
 echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main' >> ./feeds.conf.default
+wget -P Package/smartdns https://raw.githubusercontent.com/pymumu/smartdns/refs/heads/master/package/openwrt/Makefile
 #echo '' >> ./feeds.conf.default
 
 # 自定义操作2：更新feeds
