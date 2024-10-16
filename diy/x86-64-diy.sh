@@ -20,8 +20,8 @@
 #./scripts/feeds install -a
 
 # 自定义操作4：修改默认IP
-#echo "Changing the default IP address..."
-#sed -i 's/192.168.1.1/10.0.0.2/g' package/base-files/files/bin/config_generate
+echo "Changing the default IP address..."
+sed -i 's/192.168.1.1/10.0.0.22/g' package/base-files/files/bin/config_generate
 
 # 自定义操作5：添加额外的包或配置
 #echo "Adding custom packages..."
