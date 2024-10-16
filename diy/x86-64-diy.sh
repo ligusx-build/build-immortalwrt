@@ -7,9 +7,10 @@
 #cd openwrt
 
 # 自定义操作1：添加额外的feeds
-#echo "Adding custom feeds..."
-#echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >> ./feeds.conf.default
-#echo 'src-git small https://github.com/kenzok8/small' >> ./feeds.conf.default
+echo "Adding custom feeds..."
+echo 'src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git;main' >> ./feeds.conf.default
+echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main' >> ./feeds.conf.default
+#echo '' >> ./feeds.conf.default
 
 # 自定义操作2：更新feeds
 #echo "Updating feeds..."
