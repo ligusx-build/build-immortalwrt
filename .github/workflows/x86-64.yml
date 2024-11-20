@@ -3,6 +3,7 @@ name: x86-64
 on:
   watch:
    types: started
+   
   repository_dispatch:
   workflow_dispatch:
     inputs:
@@ -13,7 +14,7 @@ on:
         
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: v23.05.3
+  REPO_BRANCH: openwrt-24.10
   CONFIG_FILE: config/x86-64.config
   DIY: diy/x86-64-diy.sh
   TZ: Asia/Shanghai
@@ -52,17 +53,22 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         
+        
     - name: 执行自定义脚本
       run: |
         cd openwrt
         chmod +x $GITHUB_WORKSPACE/$DIY
         $GITHUB_WORKSPACE/$DIY
-    
+        
     - name: 配置 feeds
       run: |        
         cd openwrt
         ./scripts/feeds update -a
         ./scripts/feeds install -a
+        
+    - name: 加载.config
+      run: |        
+        cd openwrt
         cp -f $GITHUB_WORKSPACE/$CONFIG_FILE $GITHUB_WORKSPACE/openwrt/.config
         
     - name: 下载依赖
