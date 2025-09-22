@@ -63,7 +63,8 @@ jobs:
         cd openwrt
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        
+        ./scripts/feeds uninstall rust
+
     - name: 加载配置文件
       run: |        
         cd openwrt
