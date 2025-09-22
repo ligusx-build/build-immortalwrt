@@ -1,1 +1,122 @@
+name: x86-64
 
+on:
+  watch:
+   types: started
+   
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+        
+env:
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: v24.10.2
+  CONFIG_FILE: config/x86-64.config
+  DIY: diy/x86-64-diy.sh
+  FEEDS: feeds/x86-64-feeds.conf.default
+  TZ: Asia/Shanghai
+  DEVICE: x86-64
+  UPLOAD_OUTPUT: true
+
+jobs:
+  x86-64:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+
+    steps:
+    - name: 配置
+      uses: actions/checkout@master
+    
+    - name: 配置环境
+      env:
+          DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache clang cmake cpio curl device-tree-compiler ecj fastjar flex gawk gettext gcc-multilib g++-multilib git gnutls-dev gperf haveged help2man intltool lib32gcc-s1 libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses-dev libpython3-dev libreadline-dev libssl-dev libtool libyaml-dev libz-dev lld llvm lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python3 python3-pip python3-ply python3-docutils python3-pyelftools qemu-utils re2c rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev zstd
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+      
+    - name: 克隆源码
+      working-directory: /workdir
+      run: |
+        df -hT $PWD
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        
+    - name: 执行自定义脚本
+      run: |
+        cd openwrt
+        chmod +x $GITHUB_WORKSPACE/$DIY
+        $GITHUB_WORKSPACE/$DIY
+        
+    - name: 配置 feeds
+      run: |        
+        cd openwrt
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        
+    - name: 加载配置文件
+      run: |        
+        cd openwrt
+        cp -f $GITHUB_WORKSPACE/$CONFIG_FILE $GITHUB_WORKSPACE/openwrt/.config
+        
+    - name: 下载依赖
+      run: |
+        cd openwrt
+        make defconfig
+        make download -j$(nproc)
+        find dl -size -1024c -exec ls -l {} \;
+        find dl -size -1024c -exec rm -f {} \;
+
+    - name: 编译固件
+      run: |
+        cd openwrt
+        make -j$(nproc)
+        echo "FILE_DATE=$(date +"%Y年%m月%d日%H时%M分")" >> $GITHUB_ENV
+
+    - name : 上传输出文件
+      uses: actions/upload-artifact@master
+      if: env.UPLOAD_OUTPUT == 'true' && !cancelled()
+      with:
+        name: ${{ env.DEVICE }}--${{ env.FILE_DATE }}
+        path: openwrt/bin
+        
+    - name: 整理输出文件
+      run: |
+        cd openwrt/bin/targets/*/*
+        rm -rf packages
+    
+    - name: 发布固件至 Release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: "${{ env.DEVICE }}--${{ env.FILE_DATE }}"
+        artifacts: "openwrt/bin/targets/*/*/*"
+        body: |
+          # 未测试×
+          
+          IP: 10.0.0.2 | Password: none
+          
+    - name: 清理releases和workflows
+      continue-on-error: true
+      uses: danshui-git/delete-releases-workflows@main
+      with:
+        delete_releases: true
+        prerelease_option: all
+        releases_keep_keyword: targz/Update
+        releases_keep_latest: ${{ env.KEEP_RELEASES }}
+        delete_tags: true
+        max_releases_fetch: 300
+        delete_workflows: true
+        workflows_keep_latest: ${{ env.KEEP_WORKFLOWS }}
+        max_workflows_fetch: 300
+        repo: ${{ github.repository }}
+        gh_token: ${{ secrets.REPO_TOKEN }}
