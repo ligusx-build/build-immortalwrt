@@ -74,14 +74,14 @@ jobs:
       run: |
         cd openwrt
         make defconfig
-        make download -j$(nproc)
+        make download -j$(nproc) V=sc
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
     - name: 编译固件
       run: |
         cd openwrt
-        make -j$(nproc)
+        make -j$(nproc) V=sc
         echo "FILE_DATE=$(date +"%Y年%m月%d日%H时%M分")" >> $GITHUB_ENV
 
     - name : 上传输出文件
