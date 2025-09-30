@@ -14,10 +14,9 @@ on:
         
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: v24.10.2
+  REPO_BRANCH: v23.05
   CONFIG_FILE: config/x86-64.config
   DIY: diy/x86-64-diy.sh
-  FEEDS: feeds/x86-64-feeds.conf.default
   TZ: Asia/Shanghai
   DEVICE: x86-64
   UPLOAD_OUTPUT: true
