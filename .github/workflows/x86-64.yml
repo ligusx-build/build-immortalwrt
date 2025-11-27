@@ -1,6 +1,8 @@
 name: x86-64
 
 on:
+  schedule:
+   - cron: '0 0 */21 * *'
   watch:
    types: started
    
