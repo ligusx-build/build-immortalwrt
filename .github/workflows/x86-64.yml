@@ -1,8 +1,16 @@
 name: x86-64
 
 on:
+ #定时触发
   schedule:
    - cron: '0 0 */21 * *'
+
+ #配置文件变动触发
+  push:
+    branches:
+      - main
+ 
+ #star触发
   watch:
    types: started
    
