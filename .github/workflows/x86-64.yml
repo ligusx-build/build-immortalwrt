@@ -99,7 +99,7 @@ jobs:
       uses: actions/upload-artifact@master
       if: env.UPLOAD_OUTPUT == 'true' && !cancelled()
       with:
-        name: ${{ env.DEVICE }}--${{ env.FILE_DATE }}
+        name: immortalwrt-${{ env.REPO_BRANCH }}-${{ env.DEVICE }}-${{ env.FILE_DATE }}
         path: openwrt/bin
         
     - name: 整理输出文件
@@ -110,7 +110,7 @@ jobs:
     - name: 发布固件至 Release
       uses: ncipollo/release-action@v1
       with:
-        tag: "${{ env.DEVICE }}--${{ env.FILE_DATE }}"
+        tag: "immortalwrt-${{ env.REPO_BRANCH }}-${{ env.DEVICE }}-${{ env.FILE_DATE }}"
         artifacts: "openwrt/bin/targets/*/*/*"
         body: |
           # 未测试×
