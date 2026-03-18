@@ -25,7 +25,7 @@ on:
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: v24.10.5
-  CONFIG_FILE: config/tr3000-256m.config
+  CONFIG_FILE: config/tr3000.config
   DIY: diy/tr3000-diy.sh
   TZ: Asia/Shanghai
   DEVICE: ARM-MTK-TR3000
