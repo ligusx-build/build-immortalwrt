@@ -6,9 +6,9 @@ on:
    - cron: '0 0 */21 * *'
 
  #配置文件变动触发
-  push:
-    branches:
-      - main
+#  push:
+#    branches:
+#      - main
  
  #star触发
   watch:
