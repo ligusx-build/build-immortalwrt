@@ -43,23 +43,26 @@ jobs:
     
     - name: 获取最新稳定版本号
       run: |
-        echo "正在通过 GitHub API 获取 immortalwrt 最新 Release 版本..."
+        echo "正在从 releases 目录获取最新稳定版本..."
         
-        # 调用 API 获取最新 Release 的信息
-        API_RESPONSE=$(curl -sL https://api.github.com/repos/immortalwrt/immortalwrt/releases/latest)
+        # 抓取 https://downloads.immortalwrt.org/releases/ 页面
+        # 用 grep 提取所有符合 "数字.数字.数字/" 格式的目录名 (稳定版)
+        # sort -V 按版本号排序，tail -1 取最新的
+        LATEST_VERSION=$(curl -sL "https://downloads.immortalwrt.org/releases/" | \
+                         grep -oP '\d+\.\d+\.\d+/' | \
+                         sort -V | \
+                         tail -1 | \
+                         sed 's|/||g')
         
-        # 使用 jq 解析出 tag_name (例如: "v24.10.6")
-        LATEST_TAG=$(echo "$API_RESPONSE" | jq -r '.tag_name')
-        
-        # 检查是否成功获取到
-        if [ -z "$LATEST_TAG" ] || [ "$LATEST_TAG" = "null" ]; then
-          echo "❌ 获取版本失败，使用默认值: $REPO_BRANCH"
+        # 检查是否获取成功
+        if [ -z "$LATEST_VERSION" ]; then
+          echo "❌ 未能获取版本号，使用默认值: $REPO_BRANCH"
           exit 1
         fi
         
-        # 写入环境变量，覆盖默认值
-        echo "REPO_BRANCH=${LATEST_TAG}" >> $GITHUB_ENV
-        echo "✅ 获取到最新发布版本: ${LATEST_TAG}"
+        # 加上 v 前缀，写入环境变量
+        echo "REPO_BRANCH=v${LATEST_VERSION}" >> $GITHUB_ENV
+        echo "✅ 获取到最新稳定版本: v${LATEST_VERSION}"
     
     - name: 配置环境
       env:
