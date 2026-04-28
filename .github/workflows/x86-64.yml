@@ -57,7 +57,6 @@ jobs:
         # 检查是否获取成功
         if [ -z "$LATEST_VERSION" ]; then
           echo "❌ 未能获取版本号，使用默认值: $REPO_BRANCH"
-          exit 1
         fi
         
         # 加上 v 前缀，写入环境变量
