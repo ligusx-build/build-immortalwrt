@@ -15,7 +15,7 @@ sed -i 's/192.168.1.1/10.0.0.2/g' package/base-files/files/bin/config_generate
 # 自定义操作3：添加额外的包或配置
 echo "添加额外软件包..."
 # turboacc加速
-curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
+curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh --no-sfe
 # 举例添加一个包
 #git clone https://github.com/yourusername/yourrepo.git package/yourrepo
 # 或者在feeds安装后使用
