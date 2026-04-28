@@ -22,10 +22,9 @@ curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turbo
 # ./scripts/feeds install your-package
 
 # 自定义操作4：更改主题（如果使用LuCI）
-echo "更改主题..."
-# 举例：更改LuCI主题
-cd package
-git clone https://github.com/jerrykuku/luci-theme-argon.git
+#echo "更改主题..."
+#cd package
+#git clone https://github.com/jerrykuku/luci-theme-argon.git
 
 # 自定义操作5：添加自定义配置
 #echo "Adding custom configurations..."
